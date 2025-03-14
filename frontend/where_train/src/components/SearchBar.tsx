@@ -1,33 +1,46 @@
 import {useState} from "react";
 import getTrainData from "../services/trainStatus.ts";
-import getCoordinates from "../services/coordinates.ts";
 import {SearchBarProps} from "../../types.ts";
-const SearchBar=({onCoordData,onEtaData,onPrevData,onTrainInfo}:SearchBarProps)=>{
+
+const SearchBar=({onCoordData,onStaData,onStationNames,onTrainInfo}:SearchBarProps)=>{
   //only if ayi hui array ki length 2 hai
   //get comments of stuff
+  const convertToSeconds=(timeStr:string):number=>{
+    const [hours,minutes]=timeStr.split(":").map(Number);
+    return hours*3600+minutes*60;
+  };
     const [searchQuery,setSearchQuery]=useState("");
     const handleSearch=async()=>{
         if(!searchQuery.trim())return;
         try{
-            const response=await getTrainData(searchQuery);
+          const all_stations=[];
+          const all_stas=[];
+          const all_lat_lngs: number[][]=[];
+          const response=await getTrainData();
+          console.log(response);
+          const data=response;
+          console.log(`sending data${data}`);
+          onTrainInfo(response);
+          let current_stn=data.current_station_name;
+          //previous stations
+            data.previous_stations.map((station:any)=>{
+              all_stations.push(station.station_name);
+              all_stas.push(convertToSeconds(station.sta));
+              all_lat_lngs.push([station.station_lat,station.station_lng]);
+            })
+            //current station
+            all_stations.push(current_stn);
+            all_stas.push(data.cur_stn_sta);
+            //upcoming station
+            data.upcoming_stations.map((station:any)=>{
+              all_stations.push(station.station_name);
+              all_stas.push(convertToSeconds(station.sta));
+              all_lat_lngs.push([station.station_lat,station.station_lng]);
+            })
+            onStationNames(all_stations);
+            onStaData(all_stas);
             console.log(response);
-            const data=response;
-            console.log(`sending data${data}`);
-            onTrainInfo(response);
-            let current_stn=data.current_station_name;
-            const stationNames=data.upcoming_stations.map((station:any)=>station.station_name);
-            const gone_coords=data.previous_stations.map((station:any)=>[station.station_lat,station.station_lng]);
-            onPrevData(gone_coords);
-            stationNames.unshift(current_stn);
-            const etas=data.upcoming_stations.map((station:any)=>station.eta);
-            onEtaData(etas);
-            console.log(response);
-            const final_coords=data.upcoming_stations.map((station:any)=>[station.station_lat,station.station_lng]);
-           // const geo_response=await getCoordinates(stationNames);
-            //const final_coords=geo_response.map((place:any)=>{place.features[0].center});
-            console.log(final_coords);
-            onCoordData(final_coords);
-           // console.log(geo_response);
+            onCoordData(all_lat_lngs);
         }catch(error){
             console.error(error);
         }

@@ -1,5 +1,5 @@
 import React from "react";
-
+//modify this
 const TrainStatusCard=({data}:any)=>{
   console.log("trian data");
   console.log(data);
