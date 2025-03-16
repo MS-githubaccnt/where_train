@@ -164,7 +164,7 @@ app.get('/train_details/:index',(req,res)=>{
             "name":train.train_name,
             "number":train.train_number,
             "source":train.source_stn_name,
-            "destination":train.source_stn_name,
+            "destination":train.dest_stn_name,
             "station_names":all_stations,
             "station_lat_lng":all_lat_lngs,
             "station_stas":all_stas,

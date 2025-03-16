@@ -3,9 +3,21 @@ import SearchBar from "../components/SearchBar";
 import { useState, useEffect } from "react";
 import TrainStatusCard from "../components/TrainStatusCard";
 import getTrainData from "../services/trainStatus";
+import getTrainDetails from "../services/trainDetails";
 export default  function MapPage() {
 const [trainData,setTrainData]=useState<any[]>([]);
-const [currentCoords,setCurrentCoords]=useState<number[][]>([]); 
+const [currentCoords,setCurrentCoords]=useState<number[][]>([]);
+const [isSelected,setIsSelected]=useState(false);
+const [selectedData,setSelectedData]=useState(null);
+  async function clickHandler(index:number){
+  setIsSelected(true);
+  const response=await getTrainDetails(index);
+  setSelectedData(response);
+}
+function resetSelection(){
+  setIsSelected(false);
+  setSelectedData(null);
+}
 useEffect(()=>{
   async function fetchTrainData(){
     const response=await getTrainData();
@@ -47,16 +59,18 @@ useEffect(()=>{
             <Circle key={index} center={coord} radius={500} color='blue'
             eventHandlers={
               {
-              click:()=>alert('Clickity')}
+              click:async ()=>{
+                await clickHandler(index);
+              }}
             }></Circle>
-          ))
-        /* {coordData.length>0&&<Polyline positions={coordData} color="blue"/>}
-        {prevCoordData.length>0&&<Polyline positions={prevCoordData} color="blue" dashArray="10,5"/>}
-        {currCoords.length>0&&<Circle center={currCoords} radius={2800}/>} */}
+          ))}
+         { selectedData&&isSelected&&<Polyline positions={selectedData.station_lat_lng} color="blue" opacity={0.4}></Polyline>}
+         {selectedData&&isSelected&&<div className="absolute top-10 left-10 z-[5001]" >
+          <button onClick={resetSelection} className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">✖</button>
+          <TrainStatusCard data={selectedData}></TrainStatusCard>
+          </div>}
+
       </MapContainer>
-      {/* <div className="absolute top-10 left-10 z-[5001]">
-        {trainInfo&&<TrainStatusCard data={trainInfo}/>}
-      </div> */}
     </div>
   );
 }
