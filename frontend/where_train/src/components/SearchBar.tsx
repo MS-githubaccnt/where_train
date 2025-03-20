@@ -1,46 +1,21 @@
 import {useState} from "react";
 import getTrainData from "../services/trainStatus.ts";
 import {SearchBarProps} from "../../types.ts";
+import getStationDetails from "../services/stationDetail.ts";
 
-const SearchBar=({onCoordData,onStaData,onStationNames,onTrainInfo}:SearchBarProps)=>{
+const SearchBar=({onStationInfo}:SearchBarProps)=>{
   //only if ayi hui array ki length 2 hai
   //get comments of stuff
-  const convertToSeconds=(timeStr:string):number=>{
-    const [hours,minutes]=timeStr.split(":").map(Number);
-    return hours*3600+minutes*60;
-  };
+
     const [searchQuery,setSearchQuery]=useState("");
     const handleSearch=async()=>{
         if(!searchQuery.trim())return;
         try{
-          const all_stations=[];
-          const all_stas=[];
-          const all_lat_lngs: number[][]=[];
-          const response=await getTrainData();
+          const response=await getStationDetails(searchQuery);
           console.log(response);
           const data=response;
-          console.log(`sending data${data}`);
-          onTrainInfo(response);
-          let current_stn=data.current_station_name;
-          //previous stations
-            data.previous_stations.map((station:any)=>{
-              all_stations.push(station.station_name);
-              all_stas.push(convertToSeconds(station.sta));
-              all_lat_lngs.push([station.station_lat,station.station_lng]);
-            })
-            //current station
-            all_stations.push(current_stn);
-            all_stas.push(data.cur_stn_sta);
-            //upcoming station
-            data.upcoming_stations.map((station:any)=>{
-              all_stations.push(station.station_name);
-              all_stas.push(convertToSeconds(station.sta));
-              all_lat_lngs.push([station.station_lat,station.station_lng]);
-            })
-            onStationNames(all_stations);
-            onStaData(all_stas);
-            console.log(response);
-            onCoordData(all_lat_lngs);
+          onStationInfo(data);
+          console.log(`sending data${data}`);;
         }catch(error){
             console.error(error);
         }

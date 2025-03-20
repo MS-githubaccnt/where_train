@@ -1,0 +1,172 @@
+{
+    "NDLS": {
+        "name": "New Delhi",
+        "lat": 28.6134,
+        "lng": 77.2223
+    },
+    "CSB": {
+        "name": "Shivaji Bridge",
+        "lat": 28.6298,
+        "lng": 77.2410
+    },
+    "TKJ": {
+        "name": "Tilak Bridge",
+        "lat": 28.6225,
+        "lng": 77.2420
+    },
+    "PGMD": {
+        "name": "Pragati Maidan",
+        "lat": 28.6139,
+        "lng": 77.2430
+    },
+    "NZM": {
+        "name": "Hazrat Nizamuddin",
+        "lat": 28.5916,
+        "lng": 77.2507
+    },
+    "OKAC": {
+        "name": "Okhla Bypass B Cabin",
+        "lat": null,
+        "lng": null
+    },
+    "OKA": {
+        "name": "Okhla",
+        "lat": 28.5245,
+        "lng": 77.2790
+    },
+    "TKEC": {
+        "name": "Tuglakabad East Cabin",
+        "lat": null,
+        "lng": null
+    },
+    "TKD": {
+        "name": "Tuglakabad",
+        "lat": 28.4945,
+        "lng": 77.2750
+    },
+    "TKDC": {
+        "name": "Tughlakabad Cabin",
+        "lat": null,
+        "lng": null
+    },
+    "FDB": {
+        "name": "Faridabad",
+        "lat": 28.4112,
+        "lng": 77.3178
+    },
+    "FDN": {
+        "name": "Faridabad New Town",
+        "lat": 28.3940,
+        "lng": 77.3170
+    },
+    "BVH": {
+        "name": "Ballabh Garh",
+        "lat": 28.3500,
+        "lng": 77.3180
+    },
+    "PYLA": {
+        "name": "Piyala Block Hut",
+        "lat": null,
+        "lng": null
+    },
+    "AST": {
+        "name": "Asaoti",
+        "lat": 28.2460,
+        "lng": 77.3140
+    },
+    "PWL": {
+        "name": "Palwal",
+        "lat": 28.1446,
+        "lng": 77.3290
+    },
+    "RDE": {
+        "name": "Rundhi",
+        "lat": null,
+        "lng": null
+    },
+    "SHLK": {
+        "name": "Sholaka",
+        "lat": null,
+        "lng": null
+    },
+    "BNCR": {
+        "name": "Banchari",
+        "lat": null,
+        "lng": null
+    },
+    "HDL": {
+        "name": "Hodal",
+        "lat": 27.8920,
+        "lng": 77.3670
+    },
+    "KSV": {
+        "name": "Kosi Kalan",
+        "lat": 27.7930,
+        "lng": 77.4540
+    },
+    "CHJ": {
+        "name": "Chata",
+        "lat": 27.7240,
+        "lng": 77.5080
+    },
+    "AJH": {
+        "name": "Ajhai",
+        "lat": 27.6330,
+        "lng": 77.6220
+    },
+    "VRBD": {
+        "name": "Vrindaban Road",
+        "lat": 27.5910,
+        "lng": 77.6730
+    },
+    "BTSR": {
+        "name": "Bhuteshwar",
+        "lat": 27.5020,
+        "lng": 77.6740
+    },
+    "MTJ": {
+        "name": "Mathura Junction",
+        "lat": 27.5020,
+        "lng": 77.6830
+    },
+    "BAD": {
+        "name": "Baad",
+        "lat": 27.4290,
+        "lng": 77.7320
+    },
+    "FAR": {
+        "name": "Farah",
+        "lat": 27.3250,
+        "lng": 77.7610
+    },
+    "DDDM": {
+        "name": "Deen Dayal Dham",
+        "lat": null,
+        "lng": null
+    },
+    "KXM": {
+        "name": "Kitham",
+        "lat": 27.2260,
+        "lng": 77.8060
+    },
+    "RNKA": {
+        "name": "Runkuta",
+        "lat": 27.1850,
+        "lng": 77.8300
+    },
+    "BFP": {
+        "name": "Billoch Pura",
+        "lat": null,
+        "lng": null
+    },
+    "RKM": {
+        "name": "Raja Ki Mandi",
+        "lat": 27.1940,
+        "lng": 77.9940
+    },
+    "AGC": {
+        "name": "Agra Cantt.",
+        "lat": 27.1570,
+        "lng": 77.9900
+    }
+}

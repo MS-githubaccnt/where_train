@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import TrainStatusCard from "../components/TrainStatusCard";
 import getTrainData from "../services/trainStatus";
 import getTrainDetails from "../services/trainDetails";
+import StationCard from "../components/StationCard";
 export default  function MapPage() {
 const [trainData,setTrainData]=useState<any[]>([]);
+const [stationInfo,setStationInfo]=useState<any[]>([]);
 const [currentCoords,setCurrentCoords]=useState<number[][]>([]);
 const [isSelected,setIsSelected]=useState(false);
 const [selectedData,setSelectedData]=useState(null);
@@ -17,6 +19,10 @@ const [selectedData,setSelectedData]=useState(null);
 function resetSelection(){
   setIsSelected(false);
   setSelectedData(null);
+}
+function handleStationInfo(data:any){
+  setStationInfo(data);
+
 }
 useEffect(()=>{
   async function fetchTrainData(){
@@ -50,7 +56,7 @@ useEffect(()=>{
   return (
     <div className="relative h-screen w-full">
       <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-[5000]">
-        {/* <SearchBar onCoordData={handleCoordData} onStaData={handleStaData} onStationNames={handleStationNames} onTrainInfo={handleTrainInfo}/> */}
+        { <SearchBar onStationInfo={handleStationInfo}/> }
       </div>
       <MapContainer center={[28.7, 77.1]} zoom={5} scrollWheelZoom={false} className="h-full w-full">
         <TileLayer attribution='&copy; OpenStreetMap contributors' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -64,6 +70,7 @@ useEffect(()=>{
               }}
             }></Circle>
           ))}
+          {stationInfo&&<div className="absolute top-10 left-10 z-[5001]" ><StationCard trains={stationInfo}/></div>}
          { selectedData&&isSelected&&<Polyline positions={selectedData.station_lat_lng} color="blue" opacity={0.4}></Polyline>}
          {selectedData&&isSelected&&<div className="absolute top-10 left-10 z-[5001]" >
           <button onClick={resetSelection} className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full">✖</button>

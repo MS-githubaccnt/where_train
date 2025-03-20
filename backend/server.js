@@ -47,26 +47,28 @@ app.get ('/live_api',(req,res)=>{
            let days=0;
            //console.log(train.previous_stations);
             train.previous_stations.map((station)=>{
+                if(station.station_name!=""){
                 if(all_stas.length!=0){
-                    if(all_stas[all_stas.length-1]>convertToSeconds(station.sta))days++;
+                    if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60)days++;
                 }
                 all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
-                all_lat_lngs.push([station.station_lat,station.station_lng]);
+                all_lat_lngs.push([station.station_lat,station.station_lng]);}
               })
               //current station
               if(all_stas.length!=0){
-                if(all_stas[all_stas.length-1]>convertToSeconds(train.cur_stn_sta))days++;
+                if(all_stas[all_stas.length-1]>convertToSeconds(train.cur_stn_sta)+days*24*60*60)days++;
             }
               all_lat_lngs.push([train.current_lat,train.current_lng]);
               all_stas.push(convertToSeconds(train.cur_stn_sta)+days*24*60*60);
               //upcoming station
               train.upcoming_stations.map((station)=>{
+                if(station.station_name!=""){
                 if(all_stas.length!=0){
-                    if(all_stas[all_stas.length-1]>convertToSeconds(station.sta))days++;
+                    if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60)days++;
                 }
                 //all_stations.push(station.station_name);
                 all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
-                all_lat_lngs.push([station.station_lat,station.station_lng]);
+                all_lat_lngs.push([station.station_lat,station.station_lng]);}
               })
               let index=upperBound(all_stas,currTime);
               if(index==all_stas.length){
@@ -119,28 +121,30 @@ app.get('/train_details/:index',(req,res)=>{
            let last_lat_lng;
            let next_lat_lng;
         train.previous_stations.map((station)=>{
+            if(station.station_name!=""){
             if(all_stas.length!=0){
-                if(all_stas[all_stas.length-1]>convertToSeconds(station.sta))days++;
+                if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60)days++;
             }
             all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
             all_lat_lngs.push([station.station_lat,station.station_lng]);
-            all_stations.push(station.station_name);
+            all_stations.push(station.station_name);}
           })
           //current station
           if(all_stas.length!=0){
-            if(all_stas[all_stas.length-1]>convertToSeconds(train.cur_stn_sta))days++;
+            if(all_stas[all_stas.length-1]>convertToSeconds(train.cur_stn_sta)+days*24*60*60)days++;
         }
           all_lat_lngs.push([train.current_lat,train.current_lng]);
           all_stas.push(convertToSeconds(train.cur_stn_sta)+days*24*60*60);
           all_stations.push(train.current_station_name);
           //upcoming station
           train.upcoming_stations.map((station)=>{
+            if(station.station_name!=""){
             if(all_stas.length!=0){
-                if(all_stas[all_stas.length-1]>convertToSeconds(station.sta))days++;
+                if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60)days++;
             }
             all_stations.push(station.station_name);
             all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
-            all_lat_lngs.push([station.station_lat,station.station_lng]);
+            all_lat_lngs.push([station.station_lat,station.station_lng]);}
           })
           let current_station_index=upperBound(all_stas,currTime);
               if(current_station_index==all_stas.length){
@@ -177,6 +181,93 @@ app.get('/train_details/:index',(req,res)=>{
 
     }catch(e){
         res.status(500).json({error:`Error sending train details ${e}`})
+    }
+})
+app.get('/station_details/:code',(req,res)=>{
+    try {
+        const code=req.params.code;
+        const now= new Date();
+        const currTime=now.getHours()*3600+now.getMinutes()*60;
+        const jsonData=fs.readFileSync(FILE_PATH,'utf-8');
+        const parsedData=JSON.parse(jsonData);
+        const kmdata=fs.readFileSync('kmvalues.json','utf-8');
+        const parsedKmData=JSON.parse(kmdata);
+        const arr=parsedData.trains;
+        let results=[];
+        
+        for(let train of arr){
+            let last_sta;
+        
+        const all_stations=[];
+        const all_stas=[];
+        const stations_recorded=[];
+            let days=0;
+            train.previous_stations.map((station)=>{
+                
+                if(station.station_name!=""){
+                    if(all_stas.length!=0){
+                        if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60){
+                            console.log('p');
+                            days++
+                        if(days>40)console.log(all_stas)};
+                    }
+                all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
+                all_stations.push(station.station_code);}
+                if(station.station_code in parsedKmData){
+                    stations_recorded.push(station.station_code);
+                    last_sta=convertToSeconds(station.sta)+days*24*60*60;
+                }
+              })
+              //current station
+              
+              if(all_stas.length!=0){
+                if(all_stas[all_stas.length-1]>convertToSeconds(train.cur_stn_sta)+days*24*60*60)days++;
+            }
+              all_stas.push(convertToSeconds(train.cur_stn_sta)+days*24*60*60);
+              if(train.current_station_code in parsedKmData){
+                stations_recorded.push(train.current_station_code);
+                last_sta=convertToSeconds(train.cur_stn_sta)+days*24*60*60;
+            }
+              all_stations.push(train.current_station_code);
+              //upcoming station
+              train.upcoming_stations.map((station)=>{
+                
+                if(station.station_name!=""){
+                if(all_stas.length!=0){
+                    if(all_stas[all_stas.length-1]>convertToSeconds(station.sta)+days*24*60*60)days++;
+                }
+                all_stations.push(station.station_code);
+                all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
+                if(station.station_code in parsedKmData){
+                    stations_recorded.push(station.station_code);
+                    last_sta=convertToSeconds(station.sta)+days*24*60*60;
+                }
+
+            }
+              });
+              if(stations_recorded.length!=0){
+                const last=stations_recorded[stations_recorded.length-1];
+                const last_km=parsedKmData[last];
+                let req_km=parsedKmData[code];
+                console.log(req_km);
+                let diff=req_km-last_km;
+                let time_diff=diff*60;
+                console.log(days);
+                let sta_of_req=last_sta+time_diff;
+                results.push({
+                    "name":train.train_name,
+                    "number":train.train_number,
+                    "sta":sta_of_req
+                });
+              }
+
+
+
+
+        }
+        res.json(results);
+    }catch(e){
+        res.status(500).json({error:`Error sending station details ${e}`})
     }
 })
 app.listen(PORT, () => {
