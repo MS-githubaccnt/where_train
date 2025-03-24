@@ -3,7 +3,7 @@ import fs from 'fs';
 import cors from "cors";
 const app = express();
 app.use(cors());
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const FILE_PATH = 'data.json'; // Path to your JSON file
 const convertToSeconds=(timeStr)=>{
     const [hours,minutes]=timeStr.split(":").map(Number);
