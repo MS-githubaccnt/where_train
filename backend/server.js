@@ -112,6 +112,7 @@ app.get ('/live_api',(req,res)=>{
 app.get('/train_details/:index',(req,res)=>{
     try{
         const currTime=convertToSeconds(DateTime.now().setZone("Asia/Kolkata").toFormat("HH:mm:ss"));
+        console.log(currTime);
         const jsonData=fs.readFileSync(FILE_PATH,'utf-8');
         const parsedData=JSON.parse(jsonData);
         const index=parseInt(req.params.index);
@@ -124,6 +125,8 @@ app.get('/train_details/:index',(req,res)=>{
         let prev=0;
         let last_sta;
            let next_sta;
+           let next_lat_lng;
+           let last_lat_lng;
         train.previous_stations.map((station)=>{
             if(station.station_name!=""){
             
@@ -156,6 +159,9 @@ app.get('/train_details/:index',(req,res)=>{
         prev=station.sta;}
           })
           let current_station_index=upperBound(all_stas,currTime);
+          console.log(current_station_index);
+          console.log(all_lat_lngs.length)
+          console.log(all_lat_lngs[32]);
               if(current_station_index==all_stas.length){
                 last_sta=currTime;
                 next_sta=currTime;
