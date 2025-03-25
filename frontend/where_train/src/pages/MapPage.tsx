@@ -5,9 +5,10 @@ import TrainStatusCard from "../components/TrainStatusCard";
 import getTrainData from "../services/trainStatus";
 import getTrainDetails from "../services/trainDetails";
 import StationCard from "../components/StationCard";
-import { error } from "console";
-import L, { Point } from "leaflet";
-import { JSX } from "react/jsx-runtime";
+import L from "leaflet";
+import {DateTime} from "luxon";
+import convertToSeconds from "../utils/convert2seconds";
+
 export default  function MapPage() {
 
 const [stations,setStations]=useState([]);
@@ -73,8 +74,7 @@ useEffect(()=>{
 },[]);
   useEffect(()=>{
      function updatePosition(){
-    const  now=new Date();
-    const currTime=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+    let currTime=convertToSeconds(DateTime.now().setZone("Asia/Kolkata").toFormat("HH:mm:ss"));
     let current_coords:number[][]=[]
     for(let i=0;i<trainData.length;i++){
       let train=trainData[i];

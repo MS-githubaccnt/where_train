@@ -1,6 +1,7 @@
 import express from 'express';
 import fs from 'fs';
 import cors from "cors";
+import { DateTime } from 'luxon';
 const app = express();
 app.use(cors());
 const PORT = process.env.PORT || 3000;
@@ -32,8 +33,9 @@ app.get ('/live_api',(req,res)=>{
     try{
         const jsonData=fs.readFileSync(FILE_PATH,'utf-8');
         const parsedData=JSON.parse(jsonData);
-        const  now=new Date();
-        const currTime=now.getHours()*3600+now.getMinutes()*60;
+       // const  now=new Date();
+        const currTime=convertToSeconds(DateTime.now().setZone("Asia/Kolkata").toFormat("HH:mm:ss"));
+        console.log(currTime);
         const arr=parsedData.trains;
         let result=[];
         for (let train of arr){
@@ -109,8 +111,7 @@ app.get ('/live_api',(req,res)=>{
 })
 app.get('/train_details/:index',(req,res)=>{
     try{
-        const  now=new Date();
-        const currTime=now.getHours()*3600+now.getMinutes()*60;
+        const currTime=convertToSeconds(DateTime.now().setZone("Asia/Kolkata").toFormat("HH:mm:ss"));
         const jsonData=fs.readFileSync(FILE_PATH,'utf-8');
         const parsedData=JSON.parse(jsonData);
         const index=parseInt(req.params.index);
@@ -123,8 +124,6 @@ app.get('/train_details/:index',(req,res)=>{
         let prev=0;
         let last_sta;
            let next_sta;
-           let last_lat_lng;
-           let next_lat_lng;
         train.previous_stations.map((station)=>{
             if(station.station_name!=""){
             
@@ -196,8 +195,6 @@ app.get('/train_details/:index',(req,res)=>{
 app.get('/station_details/:code',(req,res)=>{
     try {
         const code=req.params.code;
-        const now= new Date();
-        const currTime=now.getHours()*3600+now.getMinutes()*60;
         const jsonData=fs.readFileSync(FILE_PATH,'utf-8');
         const parsedData=JSON.parse(jsonData);
         const kmdata=fs.readFileSync('kmvalues.json','utf-8');
