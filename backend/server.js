@@ -204,9 +204,10 @@ app.get('/station_details/:code',(req,res)=>{
         const parsedKmData=JSON.parse(kmdata);
         const arr=parsedData.trains;
         let results=[];
-        let prev=0;
         
         for(let train of arr){
+            let prev=0;
+        
             let last_sta;
         const all_stations=[];
         const all_stas=[];
@@ -217,9 +218,7 @@ app.get('/station_details/:code',(req,res)=>{
                 if(station.station_name!=""){
                     if(all_stas.length!=0){
                         if(prev>convertToSeconds(station.sta)){
-                          //  console.log('p');
                             days++
-                        //if(days>40)console.log(all_stas)
                         };
                     }
                 all_stas.push(convertToSeconds(station.sta)+days*24*60*60);
